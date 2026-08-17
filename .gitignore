@@ -1,0 +1,7 @@
+.env
+__pycache__/
+node_modules/
+menv1/
+dist/
+.claude/
+scripts/requirements1.txt

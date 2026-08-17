@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>SkillBridge — Technical Summary</title>
+<style>
+  @page { size: A4; margin: 14mm 16mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: #29281e;
+    background: #ffffff;
+    margin: 0;
+    font-size: 9.5pt;
+    line-height: 1.4;
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #48252f;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+  .brand { display: flex; align-items: center; gap: 8px; }
+  .brand svg { display: block; }
+  .brand h1 {
+    font-size: 20pt;
+    margin: 0;
+    color: #29281e;
+    letter-spacing: -0.3px;
+  }
+  .tagline { font-size: 8.5pt; color: #857861; margin-top: 2px; }
+  .meta { text-align: right; font-size: 8pt; color: #857861; }
+  .meta strong { color: #48252f; }
+
+  .overview {
+    background: #faf7f2;
+    border-left: 3px solid #48252f;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    font-size: 9pt;
+    color: #3a352c;
+  }
+
+  h2 {
+    font-size: 10.5pt;
+    color: #48252f;
+    margin: 0 0 6px 0;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #e7d4bb;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 8.3pt; }
+  th, td { text-align: left; padding: 3px 6px; border-bottom: 1px solid #eee; }
+  th { color: #857861; font-weight: 600; font-size: 7.8pt; text-transform: uppercase; letter-spacing: 0.3px; }
+  td { color: #29281e; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.best td { font-weight: 700; color: #48252f; }
+
+  .tech-table td:first-child { color: #48252f; font-weight: 600; white-space: nowrap; }
+
+  .workflow {
+    margin: 4px 0 14px 0;
+  }
+  .flow-row {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .flow-step {
+    flex: 1;
+    background: #faf7f2;
+    border: 1px solid #e7d4bb;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 7.8pt;
+    color: #3a352c;
+  }
+  .flow-step .num-badge {
+    display: inline-block;
+    width: 14px; height: 14px;
+    background: #48252f;
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 14px;
+    font-size: 7pt;
+    margin-right: 4px;
+  }
+  .flow-step b { color: #48252f; display: block; margin-bottom: 1px; font-size: 8.3pt;}
+  .flow-arrow { display: flex; align-items: center; color: #857861; font-size: 12pt; padding: 0 1px; }
+
+  .two-model-row { display: flex; gap: 10px; margin-top: 8px; }
+  .model-card {
+    flex: 1;
+    background: #faf7f2;
+    border-radius: 6px;
+    padding: 7px 9px;
+    font-size: 8pt;
+  }
+  .model-card b { color: #48252f; display: block; margin-bottom: 3px; font-size: 8.6pt; }
+
+  .features ul { margin: 0; padding-left: 14px; }
+  .features li { margin-bottom: 2px; font-size: 8.3pt; }
+  .features li b { color: #48252f; }
+
+  .footer {
+    margin-top: 14px;
+    padding-top: 6px;
+    border-top: 1px solid #e7d4bb;
+    display: flex;
+    justify-content: space-between;
+    font-size: 7.5pt;
+    color: #857861;
+  }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+        <path d="M6 30 Q24 8 42 30" stroke="#48252f" stroke-width="3" stroke-linecap="round"/>
+        <path d="M6 30 L6 38" stroke="#857861" stroke-width="3" stroke-linecap="round"/>
+        <path d="M42 30 L42 38" stroke="#857861" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="6" cy="30" r="4.5" fill="#e7d4bb"/>
+        <circle cx="42" cy="30" r="4.5" fill="#48252f"/>
+        <circle cx="24" cy="13" r="3" fill="#e7d4bb"/>
+      </svg>
+      <div>
+        <h1>SkillBridge</h1>
+        <div class="tagline">Employability score &amp; career-path prediction — technical summary</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div><strong>Minahil Kamran</strong></div>
+      <div>2026</div>
+    </div>
+  </div>
+
+  <div class="overview">
+    Predicts a student's <b>employability score</b> (0–100) and recommends one of <b>six career paths</b> from a
+    33-field academic / technical / soft-skill / activity profile, using an ensemble ML pipeline (scikit-learn +
+    XGBoost) served through FastAPI, with real per-prediction <b>SHAP explainability</b>, confidence across all
+    six careers, and an LLM chat assistant for follow-up guidance — presented through a React dashboard.
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h2>Tech Stack</h2>
+      <table class="tech-table">
+        <tr><td>Backend</td><td>Python, FastAPI, Uvicorn, Pydantic</td></tr>
+        <tr><td>ML / Data</td><td>scikit-learn, XGBoost, SHAP, pandas, numpy, pyarrow</td></tr>
+        <tr><td>EDA</td><td>matplotlib, seaborn</td></tr>
+        <tr><td>Chat / LLM</td><td>Hugging Face Inference (huggingface_hub), Qwen2.5-7B-Instruct</td></tr>
+        <tr><td>Frontend</td><td>React 19, Vite, Tailwind CSS v4</td></tr>
+        <tr><td>Animation / Charts</td><td>Framer Motion, hand-rolled inline SVG (no chart library)</td></tr>
+        <tr><td>Explainability</td><td>SHAP TreeExplainer, z-score population comparison</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>Dataset &amp; Targets</h2>
+      <table class="tech-table">
+        <tr><td>Rows</td><td>303 (post-dedup)</td></tr>
+        <tr><td>Raw features</td><td>33 (academic, technical, soft-skill, activity)</td></tr>
+        <tr><td>Engineered features</td><td>+10 derived (synergy / index scores)</td></tr>
+        <tr><td>Selected per model</td><td>Top 25 of 41 (SelectKBest)</td></tr>
+        <tr><td>Regression target</td><td>Employability_Score (0–100)</td></tr>
+        <tr><td>Classification target</td><td>Recommended_Career_Path (6 classes)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h2>Pipeline Workflow</h2>
+  <div class="workflow">
+    <div class="flow-row">
+      <div class="flow-step"><b><span class="num-badge">1</span>Raw Profile</b>33 fields via API</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><b><span class="num-badge">2</span>Clean</b>Impute + IQR winsorize</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><b><span class="num-badge">3</span>Encode + Engineer</b>Ordinal encode + 10 synergy features</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><b><span class="num-badge">4</span>Select + Scale</b>Top-25 (F-test) + StandardScaler</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><b><span class="num-badge">5</span>Ensemble Models</b>Stacking / Voting</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><b><span class="num-badge">6</span>SHAP + Response</b>Attribution, confidence, JSON</div>
+    </div>
+    <div class="two-model-row">
+      <div class="model-card">
+        <b>Regression — StackingRegressor</b>
+        RandomForest + XGBoost + GradientBoosting (base learners) → Ridge (meta-learner, 5-fold CV) → employability score + uncertainty range from base-learner spread
+      </div>
+      <div class="model-card">
+        <b>Classification — VotingClassifier (soft)</b>
+        RandomForest + XGBoost + GradientBoosting, probability-averaged → recommended career + confidence across all 6 classes
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h2>Regression Accuracy — Employability Score</h2>
+      <table>
+        <tr><th>Model</th><th class="num">R²</th><th class="num">MAE</th><th class="num">RMSE</th></tr>
+        <tr><td>Ridge Regression</td><td class="num">0.9315</td><td class="num">2.490</td><td class="num">2.896</td></tr>
+        <tr><td>Random Forest</td><td class="num">0.9401</td><td class="num">2.160</td><td class="num">2.708</td></tr>
+        <tr><td>XGBoost</td><td class="num">0.9484</td><td class="num">2.025</td><td class="num">2.514</td></tr>
+        <tr class="best"><td>Stacking Ensemble (deployed)</td><td class="num">0.9442</td><td class="num">2.142</td><td class="num">2.613</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>Classification Accuracy — Career Path</h2>
+      <table>
+        <tr><th>Model</th><th class="num">Accuracy</th><th class="num">F1 (macro)</th><th class="num">Precision</th></tr>
+        <tr class="best"><td>Voting Ensemble (deployed)</td><td class="num">95.08%</td><td class="num">0.9519</td><td class="num">0.9577</td></tr>
+      </table>
+      <div style="margin-top:8px; font-size:7.8pt; color:#857861;">
+        6 classes: Cybersecurity Analyst · Data Analyst · Machine Learning Engineer ·
+        Software Engineer · UI/UX Designer · Web Developer
+      </div>
+    </div>
+  </div>
+
+  <h2>Key Features</h2>
+  <div class="features">
+    <ul>
+      <li><b>Real confidence, not just a label</b> — soft-voting exposes probability across all 6 careers, plus an uncertainty range on the score from base-learner disagreement.</li>
+      <li><b>Genuine explainability</b> — SHAP TreeExplainer attribution (not a canned explanation) alongside population z-score comparison, toggleable in the UI, plus a SHAP waterfall chart.</li>
+      <li><b>Bias-audited</b> — Gender was originally an input feature; audited, found to contribute zero predictive value, and removed — retrained metrics identical to 4 decimal places.</li>
+      <li><b>LLM chat assistant</b> — free-tier Hugging Face model answers follow-up questions grounded in the actual prediction.</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <span>SkillBridge — full-stack ML portfolio project (FastAPI + React)</span>
+    <span>© 2026 Minahil Kamran. All rights reserved.</span>
+  </div>
+
+</body>
+</html>

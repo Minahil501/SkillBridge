@@ -1,0 +1,91 @@
+{
+  "regression": [
+    {
+      "Model": "Ridge Regression",
+      "R2": 0.9315,
+      "MAE": 2.49,
+      "RMSE": 2.896
+    },
+    {
+      "Model": "Random Forest",
+      "R2": 0.9401,
+      "MAE": 2.16,
+      "RMSE": 2.708
+    },
+    {
+      "Model": "XGBoost",
+      "R2": 0.9484,
+      "MAE": 2.025,
+      "RMSE": 2.514
+    },
+    {
+      "Model": "Stacking Ensemble",
+      "R2": 0.9442,
+      "MAE": 2.142,
+      "RMSE": 2.613
+    }
+  ],
+  "classification": [
+    {
+      "Model": "Voting Ensemble",
+      "Accuracy": 0.9508,
+      "F1 (macro)": 0.9519,
+      "Precision": 0.9577,
+      "Recall": 0.95
+    }
+  ],
+  "top_reg_features": [
+    "CGPA",
+    "Attendance_Percentage",
+    "DSA_Score",
+    "Programming_Score",
+    "Database_Score",
+    "WebDev_Score",
+    "ML_Score",
+    "Python_Skill",
+    "JavaScript_Skill",
+    "Project_Complexity_Enc",
+    "Aptitude_Test_Score",
+    "Hackathons_Participated",
+    "GitHub_Repo_Count",
+    "Coding_Contest_Rating",
+    "Mock_Interview_Score",
+    "Technical_Skill_Index",
+    "Experience_Index",
+    "Academic_Index",
+    "Competitive_Edge",
+    "Comm_Tech_Ratio",
+    "DS_Python_Synergy",
+    "Web_JS_Synergy",
+    "SE_Core_Strength",
+    "DA_Core_Strength",
+    "Tech_Soft_Product"
+  ],
+  "top_cls_features": [
+    "CGPA",
+    "DSA_Score",
+    "Programming_Score",
+    "Database_Score",
+    "WebDev_Score",
+    "ML_Score",
+    "Python_Skill",
+    "JavaScript_Skill",
+    "Project_Complexity_Enc",
+    "Aptitude_Test_Score",
+    "Projects_Count",
+    "Certifications_Count",
+    "GitHub_Repo_Count",
+    "LinkedIn_Profile_Strength",
+    "Coding_Contest_Rating",
+    "Technical_Skill_Index",
+    "Experience_Index",
+    "Language_Index",
+    "Competitive_Edge",
+    "Comm_Tech_Ratio",
+    "DS_Python_Synergy",
+    "Web_JS_Synergy",
+    "SE_Core_Strength",
+    "DA_Core_Strength",
+    "Tech_Soft_Product"
+  ]
+}

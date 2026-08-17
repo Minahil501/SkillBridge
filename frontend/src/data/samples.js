@@ -1,0 +1,55 @@
+// Preset profiles, validated against the live pipeline (see conversation history / README).
+
+export const SAMPLE_PROFILES = [
+  {
+    key: 'ml_heavy',
+    label: 'ML Engineer profile',
+    description: 'High ML score, Python, research output',
+    data: {
+      Age: 22, Semester: 7, CGPA: 3.8, Attendance_Percentage: 90,
+      DSA_Score: 80, Programming_Score: 82, Database_Score: 55, WebDev_Score: 30, ML_Score: 95,
+      Python_Skill: 95, JavaScript_Skill: 20, Project_Complexity: 'High',
+      Communication_Score: 55, Presentation_Score: 50, Problem_Solving_Score: 88,
+      Leadership_Score: 50, Teamwork_Score: 60, Aptitude_Test_Score: 85,
+      Projects_Count: 6, Certifications_Count: 5, Hackathons_Participated: 4,
+      Internship_Experience: 1, GitHub_Repo_Count: 20, LinkedIn_Profile_Strength: 70,
+      Volunteer_Activities: 0, Research_Papers: 2, Workshops_Attended: 3,
+      Coding_Contest_Rating: 1500, Mock_Interview_Score: 80, English_Proficiency_Score: 75,
+      Technical_Skill_Index: 9.0, Soft_Skill_Index: 5.5, Experience_Index: 0.9,
+    },
+  },
+  {
+    key: 'webdev_heavy',
+    label: 'Web Developer profile',
+    description: 'High WebDev + JavaScript, active GitHub',
+    data: {
+      Age: 21, Semester: 6, CGPA: 3.2, Attendance_Percentage: 80,
+      DSA_Score: 45, Programming_Score: 55, Database_Score: 50, WebDev_Score: 95, ML_Score: 20,
+      Python_Skill: 40, JavaScript_Skill: 92, Project_Complexity: 'Medium',
+      Communication_Score: 65, Presentation_Score: 60, Problem_Solving_Score: 55,
+      Leadership_Score: 50, Teamwork_Score: 65, Aptitude_Test_Score: 60,
+      Projects_Count: 7, Certifications_Count: 3, Hackathons_Participated: 3,
+      Internship_Experience: 1, GitHub_Repo_Count: 18, LinkedIn_Profile_Strength: 65,
+      Volunteer_Activities: 1, Research_Papers: 0, Workshops_Attended: 2,
+      Coding_Contest_Rating: 700, Mock_Interview_Score: 60, English_Proficiency_Score: 68,
+      Technical_Skill_Index: 7.5, Soft_Skill_Index: 6.0, Experience_Index: 0.7,
+    },
+  },
+  {
+    key: 'uiux_heavy',
+    label: 'UI/UX Designer profile',
+    description: 'High communication, presentation, leadership',
+    data: {
+      Age: 20, Semester: 5, CGPA: 3.0, Attendance_Percentage: 78,
+      DSA_Score: 30, Programming_Score: 35, Database_Score: 25, WebDev_Score: 60, ML_Score: 15,
+      Python_Skill: 30, JavaScript_Skill: 45, Project_Complexity: 'Low',
+      Communication_Score: 92, Presentation_Score: 90, Problem_Solving_Score: 50,
+      Leadership_Score: 80, Teamwork_Score: 88, Aptitude_Test_Score: 55,
+      Projects_Count: 3, Certifications_Count: 2, Hackathons_Participated: 1,
+      Internship_Experience: 0, GitHub_Repo_Count: 5, LinkedIn_Profile_Strength: 85,
+      Volunteer_Activities: 3, Research_Papers: 0, Workshops_Attended: 4,
+      Coding_Contest_Rating: 300, Mock_Interview_Score: 70, English_Proficiency_Score: 85,
+      Technical_Skill_Index: 3.5, Soft_Skill_Index: 9.0, Experience_Index: 0.5,
+    },
+  },
+]
