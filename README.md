@@ -24,35 +24,35 @@ Full-stack ML portfolio project: a trained scikit-learn/XGBoost pipeline served 
 1. **You fill in a profile** — 33 fields across academics, technical skills, soft skills, and activity/experience (or load a sample profile with one click).
 2. **The model predicts**:
    - An **employability score** (0–100) with an uncertainty range
-   - A **recommended career path** (Machine Learning Engineer, Web Developer, Data Analyst, Software Engineer, UI/UX Designer, or Cybersecurity Analyst), with confidence across *all six*, not just the winner
+   - A **recommended career path** (Machine Learning Engineer, Web Developer, Data Analyst, Software Engineer, UI/UX Designer, or Cybersecurity Analyst), with confidence across _all six_, not just the winner
 3. **You get a dashboard**: score gauge, confidence chart, a skill radar, category-strength breakdown, and the raw internally-computed metrics — all on one low-scroll Results page.
-4. **You get an Insights page**: personalized recommendations, "why this result" reasoning toggleable between *population comparison* (how your values compare to other students) and *real SHAP model attribution* (how much each feature actually moved the model's output) — including a SHAP waterfall chart.
+4. **You get an Insights page**: personalized recommendations, "why this result" reasoning toggleable between _population comparison_ (how your values compare to other students) and _real SHAP model attribution_ (how much each feature actually moved the model's output) — including a SHAP waterfall chart.
 5. **You can ask follow-up questions** via a chat widget, grounded in your actual prediction, powered by a free-tier LLM.
 
 ## Tech stack
 
 **Backend / ML**
 
-| Tech | Role |
-|---|---|
-| Python | Server-side language |
-| FastAPI + Uvicorn | REST API (`/predict`, `/chat`) |
-| Pydantic | Request validation |
-| scikit-learn | Pipelines, `StackingRegressor`, `VotingClassifier`, `SelectKBest`, custom transformers |
-| XGBoost | One of three members in each ensemble |
-| SHAP | Real per-prediction explainability (`TreeExplainer`) |
-| pandas / numpy | Data handling |
-| pyarrow | Parquet I/O for pipeline intermediates |
-| matplotlib / seaborn | EDA plots |
-| huggingface_hub | Free LLM inference for the chat feature |
+| Tech                 | Role                                                                                   |
+| -------------------- | -------------------------------------------------------------------------------------- |
+| Python               | Server-side language                                                                   |
+| FastAPI + Uvicorn    | REST API (`/predict`, `/chat`)                                                         |
+| Pydantic             | Request validation                                                                     |
+| scikit-learn         | Pipelines, `StackingRegressor`, `VotingClassifier`, `SelectKBest`, custom transformers |
+| XGBoost              | One of three members in each ensemble                                                  |
+| SHAP                 | Real per-prediction explainability (`TreeExplainer`)                                   |
+| pandas / numpy       | Data handling                                                                          |
+| pyarrow              | Parquet I/O for pipeline intermediates                                                 |
+| matplotlib / seaborn | EDA plots                                                                              |
+| huggingface_hub      | Free LLM inference for the chat feature                                                |
 
 **Frontend**
 
-| Tech | Role |
-|---|---|
-| React 19 + Vite | UI + dev/build tooling |
-| Tailwind CSS v4 | Styling / theme tokens |
-| Framer Motion | All animation |
+| Tech                   | Role                                                                   |
+| ---------------------- | ---------------------------------------------------------------------- |
+| React 19 + Vite        | UI + dev/build tooling                                                 |
+| Tailwind CSS v4        | Styling / theme tokens                                                 |
+| Framer Motion          | All animation                                                          |
 | Hand-rolled inline SVG | Every chart (gauge, bars, radar, SHAP waterfall) — no charting library |
 
 No database — the trained model is a static pickled artifact (`models/ml_pipeline.pkl`); no auth/session layer; no state-management library (plain `useState` lifted to `App.jsx` is enough at this size).
@@ -128,30 +128,30 @@ Both models sit behind an identical 6-step sklearn `Pipeline` (`scripts/sklearn_
 raw input → clean → encode → engineer → subset → select(k=25) → scale → model
 ```
 
-| Step | What it does |
-|---|---|
-| `DataCleaner` | Median/mode imputation, IQR-based outlier winsorization (bounds learned from training data) |
-| `CategoricalEncoder` | Ordinally encodes `Project_Complexity` (Low/Medium/High) |
-| `FeatureEngineer` | Computes 10 derived features from raw scores — e.g. `DS_Python_Synergy = ML_Score × Python_Skill / 100`, capturing that *combinations* of skills (not just individual scores) predict career fit |
-| `ColumnSubset` | Narrows to a fixed 41-feature set (raw + engineered) |
-| `SelectKBest` | Statistical selection down to the top 25 features (`f_regression` / `f_classif` — different per target) |
-| `StandardScaler` | Zero-mean/unit-variance normalization |
+| Step                 | What it does                                                                                                                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `DataCleaner`        | Median/mode imputation, IQR-based outlier winsorization (bounds learned from training data)                                                                                                      |
+| `CategoricalEncoder` | Ordinally encodes `Project_Complexity` (Low/Medium/High)                                                                                                                                         |
+| `FeatureEngineer`    | Computes 10 derived features from raw scores — e.g. `DS_Python_Synergy = ML_Score × Python_Skill / 100`, capturing that _combinations_ of skills (not just individual scores) predict career fit |
+| `ColumnSubset`       | Narrows to a fixed 41-feature set (raw + engineered)                                                                                                                                             |
+| `SelectKBest`        | Statistical selection down to the top 25 features (`f_regression` / `f_classif` — different per target)                                                                                          |
+| `StandardScaler`     | Zero-mean/unit-variance normalization                                                                                                                                                            |
 
 ### Training pipeline (offline, produces the artifacts above)
 
 Run these **in this order** — the numbered filenames don't match the true dependency order at a glance, so it's worth knowing:
 
-| Step | Script | Produces |
-|---|---|---|
-| 1 | `scripts/01_load_data.py` | `data/processed/metadata.json` |
-| 2 | `scripts/02_preprocessor.py` | `data/interim/df_clean.parquet` |
-| 3 | `scripts/03_eda.py` (optional) | `data/plots/*.png` |
-| 4 | `scripts/04_encoding.py` | `data/interim/df_encoded.parquet`, `models/encoder.pkl` |
-| 5 | `scripts/05_feature_engineering.py` | `data/processed/df_feat.parquet` |
-| 6 | `scripts/06_feature_selection.py` | `data/processed/feature_selection.json`, `feature_selectors.pkl` |
-| 7 | `scripts/07_scaler.py` | `data/processed/X_*_scaled.parquet`, `models/scaler.pkl` |
-| 8 | `scripts/08_pca.py` | `models/pca.pkl`, `data/plots/pca_projection.png` |
-| 9 | `scripts/09_train.py` | `models/ml_pipeline.pkl`, `models/training_metrics.json` |
+| Step | Script                              | Produces                                                         |
+| ---- | ----------------------------------- | ---------------------------------------------------------------- |
+| 1    | `scripts/01_load_data.py`           | `data/processed/metadata.json`                                   |
+| 2    | `scripts/02_preprocessor.py`        | `data/interim/df_clean.parquet`                                  |
+| 3    | `scripts/03_eda.py` (optional)      | `data/plots/*.png`                                               |
+| 4    | `scripts/04_encoding.py`            | `data/interim/df_encoded.parquet`, `models/encoder.pkl`          |
+| 5    | `scripts/05_feature_engineering.py` | `data/processed/df_feat.parquet`                                 |
+| 6    | `scripts/06_feature_selection.py`   | `data/processed/feature_selection.json`, `feature_selectors.pkl` |
+| 7    | `scripts/07_scaler.py`              | `data/processed/X_*_scaled.parquet`, `models/scaler.pkl`         |
+| 8    | `scripts/08_pca.py`                 | `models/pca.pkl`, `data/plots/pca_projection.png`                |
+| 9    | `scripts/09_train.py`               | `models/ml_pipeline.pkl`, `models/training_metrics.json`         |
 
 Steps 4–8 mirror the exploratory notebook and **aren't required to serve predictions** — `09_train.py` is fully self-contained, re-implementing clean → encode → engineer inline rather than depending on steps 4–8's intermediate files. Only its output (`models/ml_pipeline.pkl`) is loaded at inference time.
 
@@ -171,16 +171,16 @@ No conversation state is stored server-side — the frontend resends the full me
 
 ## Model performance
 
-| Regression model | R² | MAE | RMSE |
-|---|---|---|---|
-| Ridge Regression | 0.9315 | 2.490 | 2.896 |
-| Random Forest | 0.9401 | 2.160 | 2.708 |
-| XGBoost | 0.9484 | 2.025 | 2.514 |
+| Regression model                 | R²     | MAE   | RMSE  |
+| -------------------------------- | ------ | ----- | ----- |
+| Ridge Regression                 | 0.9315 | 2.490 | 2.896 |
+| Random Forest                    | 0.9401 | 2.160 | 2.708 |
+| XGBoost                          | 0.9484 | 2.025 | 2.514 |
 | **Stacking Ensemble (deployed)** | 0.9442 | 2.142 | 2.613 |
 
-| Classification model | Accuracy | F1 (macro) | Precision | Recall |
-|---|---|---|---|---|
-| **Voting Ensemble (deployed)** | 0.9508 | 0.9519 | 0.9577 | 0.95 |
+| Classification model           | Accuracy | F1 (macro) | Precision | Recall |
+| ------------------------------ | -------- | ---------- | --------- | ------ |
+| **Voting Ensemble (deployed)** | 0.9508   | 0.9519     | 0.9577    | 0.95   |
 
 Career classes: `0 Cybersecurity Analyst`, `1 Data Analyst`, `2 Machine Learning Engineer`, `3 Software Engineer`, `4 UI/UX Designer`, `5 Web Developer`.
 
@@ -206,33 +206,48 @@ The raw dataset includes `Gender`. The original pipeline encoded and fed it to b
   "employability_range": [80.38, 81.59],
   "recommended_career_path": "Cybersecurity Analyst",
   "career_class_index": 0,
-  "career_probabilities": {"Cybersecurity Analyst": 0.5365, "Data Analyst": 0.221, "...": "..."},
+  "career_probabilities": {
+    "Cybersecurity Analyst": 0.5365,
+    "Data Analyst": 0.221,
+    "...": "..."
+  },
   "confidence": 0.5365,
-  "reasoning": {"employability": ["..."], "career": ["..."]},
-  "engineered_features": {"Language_Index": 57.5, "...": "..."},
-  "shap_reasoning": {"employability": ["..."], "career": ["..."]},
-  "shap_waterfall": {"employability": {"base_value": 83.7, "points": ["..."], "total": 94.48}, "career": ["..."]}
+  "reasoning": { "employability": ["..."], "career": ["..."] },
+  "engineered_features": { "Language_Index": 57.5, "...": "..." },
+  "shap_reasoning": { "employability": ["..."], "career": ["..."] },
+  "shap_waterfall": {
+    "employability": { "base_value": 83.7, "points": ["..."], "total": 94.48 },
+    "career": ["..."]
+  }
 }
 ```
 
-| Field | What it is |
-|---|---|
-| `employability_range` | Uncertainty band from how much the 3 base regressors disagree |
-| `career_probabilities` / `confidence` | Real `predict_proba` across all 6 careers, not just the top pick |
-| `reasoning` | Top-weighted features vs. the training population (z-score + label), from `models/feature_stats.json` |
-| `engineered_features` | The 10 derived scores `FeatureEngineer` computes internally — shown for transparency; each is a fixed function of the raw fields already submitted, not independently editable |
-| `shap_reasoning` | Real per-prediction SHAP attribution from each pipeline's XGBoost sub-model — explains that component specifically, not the full ensemble (no exact SHAP decomposition exists for a `StackingRegressor`/`VotingClassifier` as a whole) |
-| `shap_waterfall` | Same SHAP contributions as a baseline → feature-by-feature → final-value cumulative sequence, for the Insights-page line chart. Non-top-6 features fold into "Other features" so it always sums exactly |
+| Field                                 | What it is                                                                                                                                                                                                                             |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `employability_range`                 | Uncertainty band from how much the 3 base regressors disagree                                                                                                                                                                          |
+| `career_probabilities` / `confidence` | Real `predict_proba` across all 6 careers, not just the top pick                                                                                                                                                                       |
+| `reasoning`                           | Top-weighted features vs. the training population (z-score + label), from `models/feature_stats.json`                                                                                                                                  |
+| `engineered_features`                 | The 10 derived scores `FeatureEngineer` computes internally — shown for transparency; each is a fixed function of the raw fields already submitted, not independently editable                                                         |
+| `shap_reasoning`                      | Real per-prediction SHAP attribution from each pipeline's XGBoost sub-model — explains that component specifically, not the full ensemble (no exact SHAP decomposition exists for a `StackingRegressor`/`VotingClassifier` as a whole) |
+| `shap_waterfall`                      | Same SHAP contributions as a baseline → feature-by-feature → final-value cumulative sequence, for the Insights-page line chart. Non-top-6 features fold into "Other features" so it always sums exactly                                |
 
 ### `POST /chat`
 
 ```json
 {
-  "messages": [{"role": "user", "content": "How can I improve my score?"}],
-  "context": {"employability_score": 80.98, "recommended_career_path": "Cybersecurity Analyst", "confidence": 0.54, "career_probabilities": {"...": 0.0}}
+  "messages": [{ "role": "user", "content": "How can I improve my score?" }],
+  "context": {
+    "employability_score": 80.98,
+    "recommended_career_path": "Cybersecurity Analyst",
+    "confidence": 0.54,
+    "career_probabilities": { "...": 0.0 }
+  }
 }
 ```
+
 → `{"reply": "..."}`. Model defaults to `Qwen/Qwen2.5-7B-Instruct`, overridable via `HF_CHAT_MODEL`.
+
+Limits: 1–10 messages per request, each 1–3000 characters, roles `user` / `assistant` only — anything else returns **422**. Too many requests returns **429**: 8 per minute per client, 200 per day across all clients. The frontend sends only the last 10 messages of a conversation.
 
 ---
 
@@ -265,9 +280,11 @@ frontend (`npm run build`) and copies the static output into a Python/FastAPI im
 needed in production. See `Dockerfile`. The `HF_TOKEN` used by `/chat` is set as a Render
 environment variable, not committed.
 
+`render.yaml` defines the service as a Render Blueprint: in the Render dashboard, **New → Blueprint** → pick this repo, and Render asks for the `HF_TOKEN` value on the first deploy. On the free plan the service sleeps after 15 minutes without traffic, and the first visit after that takes about a minute to wake it.
+
 ## Known limitations / next steps
 
 - Dataset is small (303 rows after dedup) — treat performance numbers as indicative, not production-grade.
-- No auth, rate limiting, or request logging on either endpoint — add before exposing publicly. `/chat` in particular has no per-user rate limit.
+- No auth or request logging. `/chat` is rate-limited in memory (8 messages per minute per client, 200 per day in total) — enough for a demo, but the limits reset on every restart, and the per-client key comes from `X-Forwarded-For`, which a client can fake. `/predict` has no rate limit.
 - No automated tests yet.
 - Mobile responsiveness hasn't been thoroughly tested below ~640px.
