@@ -93,6 +93,7 @@ export default function ChatWidget({ result }) {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                maxLength={1000}
                 placeholder="Ask a question..."
                 className="flex-1 bg-velvet border border-sandlewood/30 rounded-lg px-3 py-2 text-sm text-almond
                            placeholder:text-sandlewood/50 focus:outline-none focus:border-plum-light"

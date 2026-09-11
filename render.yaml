@@ -1,0 +1,10 @@
+# Render Blueprint: New → Blueprint → select this repo. Builds the root Dockerfile.
+services:
+  - type: web
+    name: skillbridge
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: HF_TOKEN
+        sync: false # secret — Render asks for the value on first deploy; never committed

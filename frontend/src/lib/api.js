@@ -24,12 +24,16 @@ export async function predictCareer(profile) {
   return res.json()
 }
 
+// Only the most recent turns are sent, keeping each request small. Must stay <= the
+// backend's ChatRequest.messages max_length (backend/main.py).
+const CHAT_HISTORY_LIMIT = 10
+
 export async function sendChatMessage(messages, context) {
   const res = await fetch(`${API_BASE}/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      messages,
+      messages: messages.slice(-CHAT_HISTORY_LIMIT),
       context: {
         employability_score: context.employability_score,
         recommended_career_path: context.recommended_career_path,
@@ -42,7 +46,10 @@ export async function sendChatMessage(messages, context) {
   if (!res.ok) {
     let detail = await res.text()
     try {
-      detail = JSON.parse(detail).detail ?? detail
+      const parsed = JSON.parse(detail).detail
+      if (typeof parsed === 'string') detail = parsed
+      // Validation errors (422) come back as a list of objects, not a readable string
+      else if (Array.isArray(parsed)) detail = 'Your message could not be sent. It may be too long.'
     } catch {
       // keep raw text
     }
