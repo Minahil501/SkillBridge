@@ -245,9 +245,9 @@ The raw dataset includes `Gender`. The original pipeline encoded and fed it to b
 }
 ```
 
-→ `{"reply": "..."}`. Model defaults to `Qwen/Qwen2.5-7B-Instruct`, overridable via `HF_CHAT_MODEL`.
+→ `{"reply": "..."}`. Model defaults to `meta-llama/Llama-3.1-8B-Instruct:cheapest`, overridable via `HF_CHAT_MODEL`. The `:cheapest` suffix routes to the lowest-priced provider serving that model; a free Hugging Face account gets $0.10 of inference credit per month, and once it runs out `/chat` returns **503** with a plain-language message while the rest of the app keeps working.
 
-Limits: 1–10 messages per request, each 1–3000 characters, roles `user` / `assistant` only — anything else returns **422**. Too many requests returns **429**: 8 per minute per client, 200 per day across all clients. The frontend sends only the last 10 messages of a conversation.
+Limits: 1–10 messages per request, each 1–3000 characters, roles `user` / `assistant` only — anything else returns **422**. Too many requests returns **429**: 8 per minute per client, 50 per day across all clients. The frontend sends only the last 10 messages of a conversation.
 
 ---
 
@@ -285,6 +285,6 @@ environment variable, not committed.
 ## Known limitations / next steps
 
 - Dataset is small (303 rows after dedup) — treat performance numbers as indicative, not production-grade.
-- No auth or request logging. `/chat` is rate-limited in memory (8 messages per minute per client, 200 per day in total) — enough for a demo, but the limits reset on every restart, and the per-client key comes from `X-Forwarded-For`, which a client can fake. `/predict` has no rate limit.
+- No auth or request logging. `/chat` is rate-limited in memory (8 messages per minute per client, 50 per day in total — sized to keep a month of demo traffic inside the $0.10 free inference credit) — enough for a demo, but the limits reset on every restart, and the per-client key comes from `X-Forwarded-For`, which a client can fake. `/predict` has no rate limit.
 - No automated tests yet.
 - Mobile responsiveness hasn't been thoroughly tested below ~640px.
