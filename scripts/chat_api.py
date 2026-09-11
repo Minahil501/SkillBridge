@@ -9,7 +9,10 @@ from huggingface_hub import InferenceClient
 
 load_dotenv()
 
-CHAT_MODEL = os.environ.get("HF_CHAT_MODEL", "Qwen/Qwen2.5-7B-Instruct")
+# Qwen/Qwen2.5-7B-Instruct no longer routes: auto-routing maps it to a Together model
+# that isn't served serverless. The ":cheapest" suffix picks the lowest-priced provider
+# serving the model, which matters because a free account gets $0.10 of credit a month.
+CHAT_MODEL = os.environ.get("HF_CHAT_MODEL", "meta-llama/Llama-3.1-8B-Instruct:cheapest")
 
 _client = None
 

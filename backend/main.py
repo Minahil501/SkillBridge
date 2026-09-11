@@ -125,7 +125,7 @@ class RateLimiter:
 # The per-client limit stops one visitor hogging the chat; the global daily cap is what
 # actually bounds spend on the HF_TOKEN's free inference credits.
 chat_client_limiter = RateLimiter(limit=8, window=60)
-chat_daily_limiter = RateLimiter(limit=200, window=24 * 60 * 60)
+chat_daily_limiter = RateLimiter(limit=50, window=24 * 60 * 60)
 
 
 def _client_key(request: Request) -> str:
@@ -156,6 +156,12 @@ def chat_endpoint(request: ChatRequest, http_request: Request):
     except RuntimeError as e:
         raise HTTPException(status_code=500, detail=str(e))
     except HfHubHTTPError as e:
+        if getattr(getattr(e, "response", None), "status_code", None) == 402:
+            raise HTTPException(
+                status_code=503,
+                detail="The chat assistant is out of free credit for this month. "
+                "Everything else on the page still works.",
+            )
         raise HTTPException(status_code=502, detail=f"Hugging Face inference error: {e}")
     return {"reply": reply}
 
